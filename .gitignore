@@ -1,5 +1,6 @@
 # Roboflow keys, GCS bucket, and other sensitive information.
 *.json
+config.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
