@@ -33,7 +33,7 @@ def get_gcs_objects(bucket_name, prefix):
 
     return [blob.name for blob in blobs if blob.name.lower().endswith((".jpg", ".jpeg", ".png"))]
 
-def upload_to_roboflow(api_key, project_name, presigned_url, img_name='', split="train"):
+def upload_to_roboflow(api_key, project_name, presigned_url, img_name='', split="train", batch=BATCH_NAME):
     """Sube una imagen a Roboflow usando su URL firmada.
     Args:
         api_key (str): Clave API de Roboflow.
@@ -54,6 +54,7 @@ def upload_to_roboflow(api_key, project_name, presigned_url, img_name='', split=
         "&name=" + img_name,
         "&split=" + split,
         "&image=" + urllib.parse.quote_plus(presigned_url),
+        "&batch=" + urllib.parse.quote_plus(BATCH_NAME)
     ])
 
     response = requests.post(upload_url)
@@ -67,10 +68,12 @@ def upload_to_roboflow(api_key, project_name, presigned_url, img_name='', split=
 if __name__ == "__main__":
     print("Buscando imágenes en GCS...")
     blobs = get_gcs_objects(GCS_BUCKET_NAME, GCS_PREFIX) # Filtra los blobs por el prefijo especificado.
+    batch_name = BATCH_NAME if BATCH_NAME.strip() else "Uploaded via API" # Nombre del batch para Roboflow, por defecto "Uploaded via API".
+
     print(f"{len(blobs)} imágenes encontradas para subir.")
     for blob in blobs:
         try:
             url = get_gcs_signed_url(GCS_BUCKET_NAME, blob)
-            upload_to_roboflow(ROBOFLOW_API_KEY, ROBOFLOW_PROJECT_NAME, url, img_name=blob, split=DEFAULT_SPLIT)
+            upload_to_roboflow(ROBOFLOW_API_KEY, ROBOFLOW_PROJECT_NAME, url, img_name=blob, split=DEFAULT_SPLIT, batch = BATCH_NAME)
         except Exception as e:
             print(f"Error al procesar {blob}: {e}")
