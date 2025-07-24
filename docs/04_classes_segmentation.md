@@ -1,0 +1,34 @@
+# **Definición de clases para segmentación semántica en HUD vehicular**
+
+Este documento recoge la descripción formal de las clases definidas para el modelo de segmentación semántica en el sistema HUD (Head-Up Display) vehicular. Dichas clases corresponden a elementos estructurales y normativos del entorno vial, y su identificación precisa permite una comprensión contextual del escenario por parte de modelos de inteligencia artificial, especialmente en tareas de navegación, conducción asistida o evaluación del comportamiento vial.
+
+Se excluyen intencionadamente los objetos móviles (vehículos, peatones, señales, etc.), ya contemplados en el modelo complementario de detección basado en *bounding boxes*.
+
+## **Tabla de clases y descripciones**
+
+| Clase                     | Descripción técnica                                                                                                                                                                                                                                     |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `road`                    | Superficie principal transitable destinada al desplazamiento vehicular. Incluye tanto calzadas marcadas como tramos sin señalización visible.                                                                                                           |
+| `road_shoulder`           | Arcén o zona lateral de la carretera destinada a paradas de emergencia, circulación eventual o separación de la vía respecto a otras infraestructuras.                                                                                                  |
+| `sidewalk`                | Superficie destinada al tránsito peatonal, adyacente a la calzada y normalmente elevada respecto a esta.                                                                                                                                                |
+| `crosswalk`               | Zona de paso peatonal demarcada por franjas generalmente blancas, que indica el derecho de paso del peatón sobre la calzada.                                                                                                                            |
+| `lane_marking_continuous` | Línea de carril continua que delimita zonas de circulación y cuya superación está generalmente prohibida. Suele emplearse para separar carriles en sentido contrario o para definir el borde derecho de la vía.                                         |
+| `lane_marking_dashed`     | Línea discontinua que permite el cambio de carril. Es habitual en zonas de circulación unidireccional o tramos de adelantamiento autorizado.                                                                                                            |
+| `lane_marking_double`     | Línea doble continua o mixta (una continua y una discontinua) utilizada para reforzar restricciones de cruce o separación de sentidos de circulación.                                                                                                   |
+| `lane_marking_other`      | Otras marcas viales horizontales que no encajan en las categorías anteriores, incluyendo líneas de borde irregular, delimitaciones de zonas prohibidas o elementos especiales de guía.                                                                  |
+| `mark_arrow_straight`     | Flecha pintada sobre la calzada que indica la continuidad recta del trayecto.                                                                                                                                                                           |
+| `mark_arrow_turn_left`    | Flecha direccional que indica giro obligatorio o permitido hacia la izquierda.                                                                                                                                                                          |
+| `mark_arrow_turn_right`   | Flecha direccional que indica giro obligatorio o permitido hacia la derecha.                                                                                                                                                                            |
+| `mark_arrow_merge`        | Flecha que representa incorporación de carril o bifurcación de vía.                                                                                                                                                                                     |
+| `mark_text_stop`          | Texto “STOP” pintado sobre la calzada como señal de detención obligatoria.                                                                                                                                                                              |
+| `mark_text_bus`           | Inscripción que delimita una zona reservada para transporte público (ej. “BUS”, “TAXI”).                                                                                                                                                                |
+| `mark_text_slow`          | Texto de advertencia (“SLOW” u otras variantes) que indica reducción de velocidad.                                                                                                                                                                      |
+| `mark_symbol_bicycle`     | Pictograma de bicicleta que señala la presencia de ciclovía o zona compartida.                                                                                                                                                                          |
+| `mark_symbol_generic`     | Otros símbolos viales horizontales no clasificados, tales como triángulos, pictogramas especiales o marcas no normativas.                                                                                                                               |
+| `background`              | Elementos no pertenecientes a las categorías anteriores. Incluye cielo, vegetación, edificaciones, vehículos, personas, señales verticales y cualquier otro objeto no estructural del entorno vial. *(Clase implícita en caso de segmentación parcial)* |
+
+## **Consideraciones**
+
+- La segmentación debe realizarse a nivel de píxel, asegurando que cada elemento visible en la imagen sea asignado de forma exclusiva a una de las clases anteriores.
+- La diferenciación entre tipos de marcas viales (continuas, discontinuas, dobles) permite una interpretación más precisa del contexto normativo de la vía y mejora el rendimiento de los sistemas de ayuda a la conducción.
+- Las clases `mark_*` permiten distinguir simbología horizontal clave para interpretación contextual avanzada del entorno.
